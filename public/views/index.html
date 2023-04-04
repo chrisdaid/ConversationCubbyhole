@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <title>Chat Room - Home</title>
+  </head>
+  <body>
+    <header>
+      <nav>
+        <div id="logo">CC</div>
+        <ul>
+          <li><a id="healthRoom" href="/books">Books</a></li>
+          <li>
+            <a id="entertainmentRoom" href="/entertainment">Entertainment</a>
+          </li>
+          <li><a id="technologyRoom" href="/technology">Technology</a></li>
+          <li><a id="healthRoom" href="/health">Health</a></li>
+        </ul>
+      </nav>
+    </header>
+
+    <section id="main-section">
+      <h1>Welcome to the Conversation Cubbyhole</h1>
+      <label for="username">Username: </label>
+      <input type="text" id="username" />
+      <button id="setUsernameBtn">Set Username</button>
+      <div id="usernameError"></div>
+    </section>
+
+    <script type="module" src="js/local.js"></script>
+  </body>
+</html>
