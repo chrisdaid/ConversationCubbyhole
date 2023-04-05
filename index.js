@@ -9,8 +9,9 @@ app.use(bodyParser.json());
 app.use("/", express.static("./public"));
 app.use(routes);
 
-// hold all the chat "rooms"
-const rooms = [];
+// global variables
+let users = [];
+let currentUsername;
 
 routes.get("/books", (req, res) => {
   res.sendFile(__dirname + "/public/views/books.html");
@@ -26,6 +27,11 @@ routes.get("/technology", (req, res) => {
 
 routes.get("/health", (req, res) => {
   res.sendFile(__dirname + "/public/views/health.html");
+});
+
+routes.post("/jquery/submitData", (req, res) => {
+  console.log("NAME IS", req.body.name);
+  currentUsername = req.body.name;
 });
 
 let msgnum = 0;
@@ -48,10 +54,18 @@ let io = require("socket.io").listen(server);
 
 io.on("connection", function (socket) {
   console.log("User connected to server");
+  console.log("Current name:", currentUsername);
 
   // keep track of currentUser's session ID
   const sessionID = socket.id;
   console.log(sessionID);
+
+  // create user and append username to the array
+  socket.on("createUser", function (username) {
+    socket.username = username;
+    users.push(username);
+    console.log(`User ${username} has been created`);
+  });
 
   // join room according to what user clicks
   let curRoom = "";
@@ -60,23 +74,24 @@ io.on("connection", function (socket) {
     curRoom = room;
     socket.currentRoom = room;
     console.log("THE CURRENT ROOM IS :", curRoom);
-    console.log("Joined room: ", socket.currentRoom);
+    console.log(`${socket.username} joined room: ${socket.currentRoom}`);
   });
 
   // send a message upon joining
   function sendJoinMessage() {
     io.sockets.in(socket.currentRoom).emit("connectToRoom", {
       serverSessionID: sessionID,
+      username: currentUsername,
       message: `joined the ${socket.currentRoom} room.`,
     });
   }
   // socket.on runs before io.sockets.in.emit, so delay it by 50ms
   setTimeout(sendJoinMessage, 50);
 
-  // message in global room
+  // message in whichever room it was sent in
   socket.on("message", function (data) {
     // Broadcast to everyone (including self)
-    io.sockets.to(socket.currentRoom).emit("message", data);
+    io.sockets.to(socket.currentRoom).emit("message", currentUsername, data);
     msgnum++;
   });
 });
@@ -87,3 +102,5 @@ io.on("connection", function (socket) {
 let port = process.env.PORT || 3000;
 
 server.listen(port);
+
+console.log("STARTED SERVER ON PORT 3000");
