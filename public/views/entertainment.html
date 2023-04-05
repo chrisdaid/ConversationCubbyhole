@@ -31,11 +31,11 @@
       });
 
       //Get message from server.
-      socket.on("message", function (data) {
-        console.log("commented " + data);
+      socket.on("message", function (username, data) {
+        console.log("User messaged " + data);
         // display message using localStorage for name
         $("#messages").append(
-          "<li>" + userName + ": " + data.comment + "</li>"
+          `<li> ${userName ? userName : "Anonymous"}: ${data.comment}</li>`
         );
         // in old code just remember the data passed in has a .name property
       });
@@ -48,7 +48,7 @@
           $("#messages").append("<li>You have " + data.message + "</li>");
         } else {
           $("#messages").append(
-            `<li>${data.serverSessionID} has ${data.message}</li>`
+            `<li>${data.username} has ${data.message}</li>`
           );
         }
       });

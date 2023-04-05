@@ -32,5 +32,58 @@
     </section>
 
     <script type="module" src="js/local.js"></script>
+
+    <script>
+      // set username in localStorage
+      function setNameLocally() {
+        let username = $("#username").val();
+        if (username.length == 0) {
+          // set error message to error
+          $("#usernameError").text("Please enter a username.");
+        } else {
+          // change error text to success
+          $("#usernameError").text(`Username is set to ${username}`);
+
+          console.log("setting name in local storage...");
+          window.localStorage.setItem("name", $("#username").val());
+
+          $.post(
+            "/jquery/submitData", // url
+            { name: username }, // data to be submit
+            function (data, status, xhr) {
+              // success callback
+              alert("status: " + status + ", data: " + data.responseData);
+            },
+            "json"
+          );
+        }
+      }
+
+      $("#setUsernameBtn").click(setNameLocally);
+
+      // $.post(
+      //   "/jquery/submitData", // url
+      //   { myData: "This is my data.", name: "jeff" }, // data to be submit
+      //   function (data, status, xhr) {
+      //     // success callback
+      //     alert("status: " + status + ", data: " + data.responseData);
+      //   },
+      //   "json"
+      // );
+
+      //
+      // socket code, setting username
+      // let socket = io();
+      // run function when setUsername btn is clicked
+      // $("#setUsernameBtn").on("click", () => {
+
+      // socket.on("connect", function () {
+      // let myUsername = $("#username").val();
+      // let myUsername = prompt("Enter username: ");
+      // console.log(myUsername);
+      // socket.emit("createUser", myUsername);
+      // });
+      // });
+    </script>
   </body>
 </html>
