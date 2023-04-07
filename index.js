@@ -3,6 +3,7 @@ let bodyParser = require("body-parser");
 let routes = require("./routes");
 let http = require("http");
 let app = express();
+let uid = require("uid-safe");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -10,7 +11,7 @@ app.use("/", express.static("./public"));
 app.use(routes);
 
 // global variables
-let users = [];
+let users = {};
 let currentUsername;
 
 routes.get("/books", (req, res) => {
@@ -29,10 +30,10 @@ routes.get("/health", (req, res) => {
   res.sendFile(__dirname + "/public/views/health.html");
 });
 
-routes.post("/jquery/submitData", (req, res) => {
-  console.log("NAME IS", req.body.name);
-  currentUsername = req.body.name;
-});
+// routes.post("/jquery/submitData", (req, res) => {
+//   console.log("NAME IS", req.body.name);
+//   currentUsername = req.body.name;
+// });
 
 let msgnum = 0;
 
@@ -63,8 +64,14 @@ io.on("connection", function (socket) {
   // create user and append username to the array
   socket.on("createUser", function (username) {
     socket.username = username;
-    users.push(username);
-    console.log(`User ${username} has been created`);
+    let userID = "";
+
+    // users[string] = username;
+    users[sessionID] = username;
+    console.log(users);
+
+    users[userID] = username;
+    console.log(`User ${username} has been created! [user id: ${userID}]`);
   });
 
   // join room according to what user clicks
@@ -81,7 +88,7 @@ io.on("connection", function (socket) {
   function sendJoinMessage() {
     io.sockets.in(socket.currentRoom).emit("connectToRoom", {
       serverSessionID: sessionID,
-      username: currentUsername,
+      username: users[sessionID],
       message: `joined the ${socket.currentRoom} room.`,
     });
   }
@@ -91,7 +98,7 @@ io.on("connection", function (socket) {
   // message in whichever room it was sent in
   socket.on("message", function (data) {
     // Broadcast to everyone (including self)
-    io.sockets.to(socket.currentRoom).emit("message", currentUsername, data);
+    io.sockets.to(socket.currentRoom).emit("message", users[sessionID], data);
     msgnum++;
   });
 });
