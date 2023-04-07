@@ -8,6 +8,7 @@
 
   <body>
     <div>
+      <button id="techRoomBtn" value="technologyRoom">Join tech room</button>
       <label>Name</label>
       <input id="name" name="a" type="text" /><br />
       <label>Comment</label>
@@ -21,7 +22,13 @@
       let socket = io();
       let clientSessionID = "";
       let isMessageSentByCurrentUser = false;
-      const roomName = "healthRoom";
+      let roomName = "healthRoom";
+
+      // join technology room with the button
+      $("#techRoomBtn").on("click", () => {
+        console.log("JOINING TECH ROOM");
+        socket.emit("joinRoom", $("#techRoomBtn").val());
+      });
 
       // set clientSessionID once client is connected
       socket.on("connect", () => {
@@ -48,7 +55,7 @@
           $("#messages").append("<li>You have " + data.message + "</li>");
         } else {
           $("#messages").append(
-            `<li>${data.serverSessionID} has ${data.message}</li>`
+            `<li>${data.username} has ${data.message}</li>`
           );
         }
       });
