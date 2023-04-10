@@ -3,7 +3,6 @@ let bodyParser = require("body-parser");
 let routes = require("./routes");
 let http = require("http");
 let app = express();
-let uid = require("uid-safe");
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -13,27 +12,6 @@ app.use(routes);
 // global variables
 let users = {};
 let currentUsername;
-
-routes.get("/books", (req, res) => {
-  res.sendFile(__dirname + "/public/views/books.html");
-});
-
-routes.get("/entertainment", (req, res) => {
-  res.sendFile(__dirname + "/public/views/entertainment.html");
-});
-
-routes.get("/technology", (req, res) => {
-  res.sendFile(__dirname + "/public/views/technology.html");
-});
-
-routes.get("/health", (req, res) => {
-  res.sendFile(__dirname + "/public/views/health.html");
-});
-
-// routes.post("/jquery/submitData", (req, res) => {
-//   console.log("NAME IS", req.body.name);
-//   currentUsername = req.body.name;
-// });
 
 let msgnum = 0;
 
@@ -61,39 +39,65 @@ io.on("connection", function (socket) {
   const sessionID = socket.id;
   console.log(sessionID);
 
+  let curRoom = "";
+
   // create user and append username to the array
   socket.on("createUser", function (username) {
     socket.username = username;
     let userID = "";
 
-    // users[string] = username;
     users[sessionID] = username;
     console.log(users);
 
     users[userID] = username;
     console.log(`User ${username} has been created! [user id: ${userID}]`);
+
+    // after user is created, automatically set the curRoom to "globalRoom"
+    curRoom = "globalRoom";
+    socket.currentRoom = "globalRoom";
   });
 
-  // join room according to what user clicks
-  let curRoom = "";
-  socket.on("joinRoom", function (room) {
-    socket.join(room);
-    curRoom = room;
-    socket.currentRoom = room;
-    console.log("THE CURRENT ROOM IS :", curRoom);
-    console.log(`${socket.username} joined room: ${socket.currentRoom}`);
-  });
+  // send a message when leaving a channel
+
+  function sendLeaveMessage() {
+    io.sockets.in(socket.currentRoom).emit("disconnectFromRoom", {
+      serverSessionID: sessionID,
+      username: users[sessionID],
+      message: `<b>left</b> the ${socket.currentRoom}.`,
+    });
+  }
 
   // send a message upon joining
   function sendJoinMessage() {
     io.sockets.in(socket.currentRoom).emit("connectToRoom", {
       serverSessionID: sessionID,
       username: users[sessionID],
-      message: `joined the ${socket.currentRoom} room.`,
+      message: `<b>joined</b> the ${socket.currentRoom}.`,
     });
   }
-  // socket.on runs before io.sockets.in.emit, so delay it by 50ms
-  setTimeout(sendJoinMessage, 50);
+
+  // join room according to what user clicks
+  socket.on("joinRoom", function (room) {
+    // first leave current room
+    // send a leave message to current room
+    if (curRoom != room) {
+      // setTimeout(sendLeaveMessage, 10);
+      sendLeaveMessage();
+    }
+
+    socket.leave(curRoom);
+
+    // join new room
+    socket.join(room);
+    curRoom = room;
+    socket.currentRoom = room;
+
+    console.log("THE CURRENT ROOM IS :", curRoom);
+    console.log(`${socket.username} joined room: ${socket.currentRoom}`);
+
+    // send a join message to everyone
+    setTimeout(sendJoinMessage, 50);
+  });
 
   // message in whichever room it was sent in
   socket.on("message", function (data) {
