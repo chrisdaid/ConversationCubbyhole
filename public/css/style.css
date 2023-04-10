@@ -1,0 +1,123 @@
+:root {
+  --bg-color: #2f3e46;
+  --text-color: #cad2c5;
+  --btn-color: #84a98c;
+  --accent-color: #52796f;
+  --dark-accent-color: #354f52;
+}
+
+/* custom scroll bar  */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgba(47, 62, 70, 0.85);
+  /* bg color but just more transparent  */
+  border-radius: 3px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: var(--accent-color);
+  transition: 0.25s ease-in-out;
+  border-radius: 3px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: var(--dark-accent-color);
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+html {
+  height: 100vh;
+}
+
+body {
+  font-family: "Open-Sans", sans-serif;
+  background-color: var(--bg-color);
+  height: 100%;
+  color: var(--text-color);
+}
+
+.welcome-modal {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 30px;
+  border-radius: 10px;
+  gap: 10px;
+}
+
+.welcome-modal #subtitle {
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.welcome-modal #username {
+  font-size: 1.2rem;
+  border: none;
+  padding: 3px;
+}
+
+.welcome-modal #setUsernameBtn {
+  border: none;
+  background-color: var(--btn-color);
+  padding: 10px;
+  transition: 0.3s;
+  font-family: inherit;
+  font-weight: 400;
+}
+
+.welcome-modal #setUsernameBtn:hover {
+  background-color: var(--accent-color);
+  cursor: pointer;
+}
+
+/* actual chat section  */
+
+.select-room-container {
+  background: #333;
+  display: flex;
+  flex-direction: column;
+  width: auto;
+}
+
+.select-room-container .select-room {
+  display: flex;
+  flex-direction: column;
+}
+
+#messages-section {
+  background-color: pink;
+  height: 70%;
+}
+
+.message-container {
+  overflow-y: auto;
+  max-height: 400px;
+  max-width: 1200px;
+  background-color: blue;
+}
+
+#messages {
+  width: 100%;
+}
+
+.chat-container {
+  max-width: 1200px;
+  position: absolute;
+  bottom: 0;
+  background-color: red;
+  width: 100%;
+  display: flex;
+  flex-grow: 0;
+}
