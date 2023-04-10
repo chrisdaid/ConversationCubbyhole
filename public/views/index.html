@@ -6,6 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://code.jquery.com/jquery-2.1.3.min.js"></script>
     <script src="/socket.io/socket.io.js"></script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap"
+      rel="stylesheet"
+    />
     <title>Chat Room - Home</title>
   </head>
   <body>
@@ -24,140 +31,54 @@
     </header>
 
     <section id="main-section">
-      <h1>Welcome to the Conversation Cubbyhole</h1>
-      <label for="username">Username: </label>
-      <input type="text" id="username" />
-      <button id="setUsernameBtn">Set Username</button>
-      <div id="usernameError"></div>
-    </section>
-
-    <section id="chat">
-      <div>
-        <button id="techRoomBtn" value="technologyRoom">Join tech room</button>
-
-        <label>Name</label>
-        <input id="name" name="a" type="text" /><br />
-        <label>Comment</label>
-        <input id="comment" name="b" type="text" /><br />
-        <input id="imageUploader" type="file" name="image" />
+      <!-- navigation - room selector  -->
+      <div class="select-room-container">
+        <div class="select-room-title">Rooms</div>
+        <div class="select-room">
+          <button onclick="joinRoom('globalRoom')" value="globalRoom">
+            global
+          </button>
+          <button onclick="joinRoom('booksRoom')" value="booksRoom">
+            books
+          </button>
+          <button
+            onclick="joinRoom('entertainmentRoom')"
+            value="entertainmentRoom"
+          >
+            entertainment
+          </button>
+          <button onclick="joinRoom('technologyRoom')" value="technologyRoom">
+            technology
+          </button>
+          <button onclick="joinRoom('healthRoom')" value="healthRoom">
+            health
+          </button>
+        </div>
       </div>
-      <ul id="messages"></ul>
+
+      <!-- welcome modal  -->
+      <div class="welcome-modal">
+        <h1>Welcome to the Conversation Cubbyhole</h1>
+        <!-- <h2>"it's not 4chan."</h2> -->
+        <h2 id="subtitle">Enter your preferred username and begin chatting!</h2>
+        <input type="text" id="username" placeholder="John Doe" />
+        <button id="setUsernameBtn">Join Global</button>
+        <div id="usernameError"></div>
+      </div>
     </section>
 
-    <script type="module" src="js/local.js"></script>
+    <section id="messages-section">
+      <div class="message-container">
+        <ul id="messages"></ul>
+      </div>
+    </section>
 
-    <script>
-      // set username in localStorage
-      // function setNameLocally() {
-      //   let username = $("#username").val();
-      //   if (username.length == 0) {
-      //     // set error message to error
-      //     $("#usernameError").text("Please enter a username.");
-      //   } else {
-      //     // change error text to success
-      //     $("#usernameError").text(`Username is set to ${username}`);
+    <div class="chat-container">
+      <!-- <label>Comment</label> -->
+      <input id="comment" name="b" type="text" /><br />
+      <input id="imageUploader" type="file" name="image" />
+    </div>
 
-      //     console.log("setting name in local storage...");
-      //     window.localStorage.setItem("name", $("#username").val());
-
-      //     $.post(
-      //       "/jquery/submitData", // url
-      //       { name: username }, // data to be submit
-      //       function (data, status, xhr) {
-      //         // success callback
-      //         alert("status: " + status + ", data: " + data.responseData);
-      //       },
-      //       "json"
-      //     );
-      //   }
-      // }
-
-      // $("#setUsernameBtn").click(setNameLocally);
-
-      // socket code, setting username
-      let socket = io();
-      // run function when setUsername btn is clicked
-      $("#setUsernameBtn").on("click", () => {
-        // socket.on("connect", function () {
-        let myUsername = $("#username").val();
-        // let myUsername = prompt("Enter username: ");
-        console.log(myUsername);
-        socket.emit("createUser", myUsername);
-      });
-      // });
-    </script>
-
-    <script>
-      // let userName;
-      // let socket = io();
-      let clientSessionID = "";
-      let isMessageSentByCurrentUser = false;
-      let roomName = "global";
-
-      // join technology room with the button
-      $("#techRoomBtn").on("click", () => {
-        console.log("JOINING TECH ROOM");
-        socket.emit("joinRoom", $("#techRoomBtn").val());
-      });
-
-      // set clientSessionID once client is connected
-      socket.on("connect", () => {
-        clientSessionID = socket.id;
-        // join room global
-        socket.emit("joinRoom", roomName);
-      });
-
-      //Get message from server.
-      socket.on("message", function (username, data) {
-        console.log("commented " + data);
-        // display message
-        $("#messages").append(
-          `<li> ${username ? username : "Anonymous"}: ${data.comment}</li>`
-        );
-        // in old code just remember the data passed in has a .name property
-      });
-
-      socket.on("connectToRoom", function (data) {
-        // log out the client side session ID
-        console.log(clientSessionID);
-        // send different global messages depending on if the client is seeing it or others are seeing it
-        if (data.serverSessionID == clientSessionID) {
-          $("#messages").append("<li>You have " + data.message + "</li>");
-        } else {
-          $("#messages").append(
-            `<li>${data.username} has ${data.message}</li>`
-          );
-        }
-      });
-
-      function Clicked() {
-        socket.emit("message", {
-          name: $("#name").val(),
-          comment: $("#comment").val(),
-          image: $("#imageUploader"),
-          // FIX image path, for now we just have a image property
-        });
-        return false;
-      }
-
-      $(document).ready(function () {
-        console.log("ready");
-        $("#name").keydown(function (event) {
-          if (event.which === 13) {
-            Clicked();
-            event.preventDefault();
-            return false;
-          }
-        });
-        $("#comment").keydown(function (event) {
-          if (event.which === 13) {
-            Clicked();
-            $("#comment").val("");
-            event.preventDefault();
-            return false;
-          }
-        });
-      });
-    </script>
+    <script src="js/local.js"></script>
   </body>
 </html>
