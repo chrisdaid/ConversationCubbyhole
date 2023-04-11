@@ -110,8 +110,8 @@ io.on("connection", function (socket) {
 /**
  * Listen on provided port, on all network interfaces.
  */
-let port = process.env.PORT || 3000;
+let port = process.env.PORT || 3001;
 
 server.listen(port);
 
-console.log("STARTED SERVER ON PORT 3000");
+console.log("STARTED SERVER ON PORT 3001");
