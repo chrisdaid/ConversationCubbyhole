@@ -105,6 +105,11 @@ io.on("connection", function (socket) {
     io.sockets.to(socket.currentRoom).emit("message", users[sessionID], data);
     msgnum++;
   });
+
+  // process image
+  socket.on("image", function (msg) {
+    io.sockets.to(socket.currentRoom).emit("image", msg);
+  });
 });
 
 /**
