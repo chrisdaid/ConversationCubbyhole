@@ -17,20 +17,25 @@
   </head>
   <body>
     <header>
-      <nav>
-        <div id="logo">CC</div>
-        <ul>
-          <li><a id="healthRoom" href="/books">Books</a></li>
-          <li>
-            <a id="entertainmentRoom" href="/entertainment">Entertainment</a>
-          </li>
-          <li><a id="technologyRoom" href="/technology">Technology</a></li>
-          <li><a id="healthRoom" href="/health">Health</a></li>
-        </ul>
-      </nav>
+      <div id="logo"></div>
+      <h1>Conversation Cubbyhole</h1>
     </header>
 
     <section id="main-section">
+      <!-- welcome modal  -->
+      <div class="welcome-modal">
+        <!-- <h2>"it's not 4chan."</h2> -->
+        <h2 id="subtitle">Enter your preferred username and begin chatting!</h2>
+        <input type="text" id="username" placeholder="John Doe" />
+        <button id="setUsernameBtn">Join Global</button>
+        <div id="usernameError"></div>
+      </div>
+    </section>
+
+    <section id="application">
+      <!-- container with the rooms on the left, and the messages on the right -->
+      <!-- below that container is the textbox for messages and the attach image button on the left of the textbox  -->
+
       <!-- navigation - room selector  -->
       <div class="select-room-container">
         <div class="select-room-title">Rooms</div>
@@ -56,27 +61,26 @@
         </div>
       </div>
 
-      <!-- welcome modal  -->
-      <div class="welcome-modal">
-        <h1>Welcome to the Conversation Cubbyhole</h1>
-        <!-- <h2>"it's not 4chan."</h2> -->
-        <h2 id="subtitle">Enter your preferred username and begin chatting!</h2>
-        <input type="text" id="username" placeholder="John Doe" />
-        <button id="setUsernameBtn">Join Global</button>
-        <div id="usernameError"></div>
-      </div>
-    </section>
-
-    <section id="messages-section">
+      <!-- messages  -->
       <div class="message-container">
         <ul id="messages"></ul>
       </div>
     </section>
 
+    <section id="messages-section"></section>
+
     <div class="chat-container">
       <!-- <label>Comment</label> -->
       <input id="comment" name="b" type="text" /><br />
-      <input id="imageUploader" type="file" name="image" />
+      <!-- <input id="imageUploader" type="file" name="image" -->
+      <!--changed-->
+      <form action="">
+        <input
+          id="image"
+          type="file"
+          accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
+        />
+      </form>
     </div>
 
     <script src="js/local.js"></script>
