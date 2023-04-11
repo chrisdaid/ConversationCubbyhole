@@ -40,15 +40,19 @@ socket.on("connect", () => {
 //Get message from server.
 socket.on("message", function (username, data) {
   console.log("commented " + data);
-  // display message
-  $("#messages").append(
-    `<li> ${username ? username : "Anonymous"}: ${data.comment}</li>`
-  );
+  let comment = data.comment;
+  let messageSentFrom = username ? username : "Anonymous";
+  // display message preventing XSS scripting
+  var li = $("<div />", { text: ": " + comment });
+  var al = $("<span />", { text: messageSentFrom });
+  li.prepend(al);
+  $("#messages").append(li);
 });
 
 socket.on("disconnectFromRoom", function (data) {
   // only send to the channel, no need for the client who disconnects to have a message
   if (data.serverSessionID == clientSessionID) {
+    $("#messages").text(message);
     $("#messages").append(`<li>You have ${data.message}</li>`);
   } else {
     $("#messages").append(`<li>${data.username} has ${data.message}</li>`);
@@ -94,20 +98,47 @@ $("#setUsernameBtn").on("click", () => {
   }
 });
 
+//added
+socket.on("image", function (info) {
+  if (info.buffer) {
+    $("#messages").append(
+      $("<li>").append($("<img>").attr("src", info.buffer))
+    );
+  }
+});
+
+var uploadFile = function () {
+  var file = $("input[type=file]")[0].files[0];
+  $("input[type=file]").val("");
+  if (file) {
+    var reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = function (event) {
+      socket.emit("image", { image: true, buffer: event.target.result });
+    };
+    reader.onerror = function (event) {
+      console.log("Error reading file: ", event);
+    };
+  }
+};
+
 $(document).ready(function () {
   console.log("ready");
-  $("#name").keydown(function (event) {
-    if (event.which === 13) {
-      Clicked();
-      event.preventDefault();
-      return false;
-    }
-  });
   $("#comment").keydown(function (event) {
     if (event.which === 13) {
       Clicked();
       $("#comment").val("");
       event.preventDefault();
+      return false;
+    }
+  });
+
+  //added
+  $("#image").keydown(function (event) {
+    if (event.which === 13) {
+      if ($("input[type=file]")[0].files[0]) {
+        uploadFile();
+      }
       return false;
     }
   });
