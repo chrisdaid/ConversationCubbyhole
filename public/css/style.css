@@ -120,11 +120,29 @@ header #logo {
 
 /* actual chat section  */
 
+#application {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.selector-and-messages-container {
+  display: flex;
+  width: 100%;
+}
+
 .select-room-container {
-  background: #333;
+  text-align: center;
+  background: rgba(0, 0, 0, 0.15);
+  padding: 5px;
   display: flex;
   flex-direction: column;
   width: auto;
+}
+
+.select-room-container .select-room-title {
+  margin-bottom: 10px;
+  font-weight: 600;
 }
 
 .select-room-container .select-room {
@@ -132,16 +150,28 @@ header #logo {
   flex-direction: column;
 }
 
-#messages-section {
-  /* background-color: pink; */
+.select-room-container .select-room button {
+  height: 50px;
+  width: 50px;
+  border-radius: 100%;
+}
+
+#globalRoom {
+  background: url("../assets/global.png");
+  background-size: contain;
+}
+
+/* #messages-section {
   background-color: rgba(0, 0, 0, 0.3);
   height: 400px;
-}
+} */
 
 .message-container {
   overflow-y: auto;
+  background-color: red;
+  width: 100%;
   max-height: 400px;
-  max-width: 1200px;
+  /* max-width: 1200px; */
 }
 
 #messages {
