@@ -103,6 +103,10 @@ header #logo {
   font-weight: 600;
 }
 
+.welcome-modal .username-and-button-container {
+  display: flex;
+}
+
 .welcome-modal #username {
   font-size: 1.2rem;
   border: none;
@@ -112,7 +116,8 @@ header #logo {
 .welcome-modal #setUsernameBtn {
   border: none;
   background-color: var(--btn-color);
-  padding: 10px;
+  padding: 8px;
+  height: 100%;
   transition: 0.3s;
   font-family: inherit;
   font-weight: 400;
@@ -261,8 +266,13 @@ input[type="file"] {
   background-size: 60%;
 }
 
-/* MISC classes */
+/* MISC classes/IDs */
 
 .hidden {
   display: none;
+}
+
+#usernameError {
+  color: var(--error-color);
+  margin-top: -5px;
 }
