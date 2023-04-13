@@ -5,7 +5,15 @@ $("#setUsernameBtn").on("click", () => {
   let myUsername = $("#username").val();
   console.log(myUsername);
   socket.emit("createUser", myUsername);
+
+  // make the textbox visible
+  $(".chat-container").toggleClass("hidden");
 });
+
+// scroll to bottom function
+function scrollToBottom() {
+  $(".message-container").scrollTop($(".message-container")[0].scrollHeight);
+}
 
 // NOTES
 // MAKE SURE TO LEAVE PREVIOUS ROOM AFTER JOINING A NEW ONE
@@ -40,6 +48,7 @@ socket.on("connect", () => {
 //Get message from server.
 socket.on("message", function (username, data) {
   console.log("commented " + data);
+
   let comment = data.comment;
   let messageSentFrom = username ? username : "Anonymous";
   // display message preventing XSS scripting
@@ -47,16 +56,22 @@ socket.on("message", function (username, data) {
   var al = $("<span />", { text: messageSentFrom });
   li.prepend(al);
   $("#messages").append(li);
+
+  scrollToBottom();
 });
 
 socket.on("disconnectFromRoom", function (data) {
   // only send to the channel, no need for the client who disconnects to have a message
   if (data.serverSessionID == clientSessionID) {
-    $("#messages").text(message);
+    // clear chat besides the join and leave messages
+    $("#messages").children().remove();
+
+    // $("#messages").text(message);
     $("#messages").append(`<li>You have ${data.message}</li>`);
   } else {
     $("#messages").append(`<li>${data.username} has ${data.message}</li>`);
   }
+  scrollToBottom();
 });
 
 socket.on("connectToRoom", function (data) {
@@ -68,6 +83,7 @@ socket.on("connectToRoom", function (data) {
   } else {
     $("#messages").append(`<li>${data.username} has ${data.message}</li>`);
   }
+  scrollToBottom();
 });
 
 function Clicked() {
@@ -75,7 +91,6 @@ function Clicked() {
     name: $("#name").val(),
     comment: $("#comment").val(),
     image: $("#imageUploader"),
-    // FIX image path, for now we just have a image property
   });
   return false;
 }
@@ -89,6 +104,7 @@ $("#setUsernameBtn").on("click", () => {
     $(".welcome-modal").css("display", "none");
 
     // join room global
+    currentRoomName = "globalRoom";
     socket.emit("joinRoom", currentRoomName);
     // change message box placeholder to reflect current room
     $("#comment").attr(
@@ -98,12 +114,34 @@ $("#setUsernameBtn").on("click", () => {
   }
 });
 
+function focusFileUpload() {
+  $("#image").focus();
+}
+
+function goHome() {
+  $("#username").val("");
+  socket.emit("leaveRoom");
+  $(".welcome-modal").css("display", "flex");
+  // $("#comment").attr("placeholder", "");
+  $(".chat-container").toggleClass("hidden");
+}
+
+// because of the custom upload image icon, we're using a label to display the icon and made the file uploader hidden
+// must use this function to call the fileupload
+$("#custom-upload").on("click", function () {
+  $("#image").click();
+  console.log("custom upload button clicked");
+  focusFileUpload();
+  return false;
+});
+
 //added
 socket.on("image", function (info) {
   if (info.buffer) {
     $("#messages").append(
       $("<li>").append($("<img>").attr("src", info.buffer))
     );
+    scrollToBottom();
   }
 });
 
@@ -126,9 +164,12 @@ $(document).ready(function () {
   console.log("ready");
   $("#comment").keydown(function (event) {
     if (event.which === 13) {
+      if ($("input[type=file]")[0].files[0]) {
+        uploadFile();
+      }
       Clicked();
       $("#comment").val("");
-      event.preventDefault();
+      event.preventDefault(); // take out if bugs
       return false;
     }
   });
@@ -139,6 +180,8 @@ $(document).ready(function () {
       if ($("input[type=file]")[0].files[0]) {
         uploadFile();
       }
+      Clicked();
+      $("#comment").val("");
       return false;
     }
   });
