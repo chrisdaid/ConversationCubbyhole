@@ -14,6 +14,10 @@
       rel="stylesheet"
     />
     <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"
+    />
+    <link
       rel="icon"
       type="image/png"
       sizes="32x32"
@@ -28,7 +32,7 @@
     <title>Conversation Cubbyhole</title>
   </head>
   <body>
-    <header>
+    <header class="animate__animated animate__backInDown animate__fast">
       <div id="logo"></div>
       <h1>Conversation Cubbyhole</h1>
     </header>
@@ -37,7 +41,9 @@
       <!-- welcome modal  -->
       <div class="welcome-modal">
         <!-- <h2>"it's not 4chan."</h2> -->
-        <h2 id="subtitle">Enter your preferred username and begin chatting!</h2>
+        <h2 id="subtitle" class="">
+          Enter your preferred username and begin chatting!
+        </h2>
         <input type="text" id="username" placeholder="John Doe" />
         <button id="setUsernameBtn">Join Global</button>
         <div id="usernameError"></div>
@@ -54,40 +60,46 @@
           <div class="select-room-title">Rooms</div>
           <div class="select-room">
             <button
+              onclick="goHome()"
+              id="homePage"
+              class="room-icon"
+              title="home"
+            ></button>
+            <button
               onclick="joinRoom('globalRoom')"
               id="globalRoom"
+              class="room-icon"
               value="globalRoom"
-            >
-              global
-            </button>
+              title="global"
+            ></button>
             <button
               onclick="joinRoom('booksRoom')"
               id="booksRoom"
+              class="room-icon"
               value="booksRoom"
-            >
-              books
-            </button>
+              title="books"
+            ></button>
             <button
               onclick="joinRoom('entertainmentRoom')"
               value="entertainmentRoom"
               id="entertainmentRoom"
-            >
-              entertainment
-            </button>
+              class="room-icon"
+              title="entertainment"
+            ></button>
             <button
               onclick="joinRoom('technologyRoom')"
               id="technologyRoom"
               value="technologyRoom"
-            >
-              technology
-            </button>
+              class="room-icon"
+              title="technology"
+            ></button>
             <button
               onclick="joinRoom('healthRoom')"
               id="healthRoom"
               value="healthRoom"
-            >
-              health
-            </button>
+              class="room-icon"
+              title="health"
+            ></button>
           </div>
         </div>
 
@@ -100,18 +112,19 @@
 
     <section id="messages-section"></section>
 
-    <div class="chat-container">
-      <!-- <label>Comment</label> -->
-      <input id="comment" name="b" type="text" /><br />
-      <!-- <input id="imageUploader" type="file" name="image" -->
-      <!--changed-->
+    <div class="chat-container hidden">
+      <!--image uploader-->
       <form action="">
+        <label for="image" id="custom-upload" class="custom-file-upload">
+        </label>
+
         <input
           id="image"
           type="file"
           accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
         />
       </form>
+      <input id="comment" name="b" type="text" /><br />
     </div>
 
     <script src="js/local.js"></script>
