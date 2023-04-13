@@ -99,6 +99,25 @@ io.on("connection", function (socket) {
     setTimeout(sendJoinMessage, 50);
   });
 
+  // leaveRoom (only meant for going home)
+  socket.on("leaveRoom", function () {
+    // first leave current room
+    // send a leave message to current room
+    sendLeaveMessage();
+
+    socket.leave(curRoom);
+    // join global
+    curRoom = "globalRoom";
+
+    socket.currentRoom = "globalRoom";
+
+    console.log("THE CURRENT ROOM IS :", curRoom);
+    console.log(`${socket.username} joined room: ${socket.currentRoom}`);
+
+    // send a join message to everyone
+    setTimeout(sendJoinMessage, 50);
+  });
+
   // message in whichever room it was sent in
   socket.on("message", function (data) {
     // Broadcast to everyone (including self)
