@@ -13,6 +13,7 @@ $("#setUsernameBtn").on("click", () => {
 // scroll to bottom function
 function scrollToBottom() {
   $(".message-container").scrollTop($(".message-container")[0].scrollHeight);
+  console.log("scrolled to bottom!");
 }
 
 // NOTES
@@ -57,7 +58,8 @@ socket.on("message", function (username, data) {
   li.prepend(al);
   $("#messages").append(li);
 
-  scrollToBottom();
+  setTimeout(scrollToBottom, 30);
+  // scrollToBottom();
 });
 
 socket.on("disconnectFromRoom", function (data) {
