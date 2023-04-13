@@ -58,7 +58,7 @@ socket.on("message", function (username, data) {
   li.prepend(al);
   $("#messages").append(li);
 
-  setTimeout(scrollToBottom, 30);
+  setTimeout(scrollToBottom, 100);
   // scrollToBottom();
 });
 
