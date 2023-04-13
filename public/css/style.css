@@ -222,6 +222,10 @@ header #logo {
   height: 400px;
 }
 
+#messages li img {
+  max-height: 150px;
+}
+
 /* textbox + image upload button  */
 .chat-container {
   max-width: 1200px;
