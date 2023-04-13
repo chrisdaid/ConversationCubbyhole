@@ -3,11 +3,18 @@ let socket = io();
 // run function when setUsername btn is clicked
 $("#setUsernameBtn").on("click", () => {
   let myUsername = $("#username").val();
-  console.log(myUsername);
-  socket.emit("createUser", myUsername);
+  myUsername = myUsername.trim();
 
-  // make the textbox visible
-  $(".chat-container").toggleClass("hidden");
+  if (myUsername.length > 0) {
+    console.log("FIRST IF STATEMENT");
+    socket.emit("createUser", myUsername);
+
+    // make the textbox visible
+    $(".chat-container").toggleClass("hidden");
+  } else {
+    // display error if name is empty
+    $("#usernameError").toggleClass("hidden");
+  }
 });
 
 // scroll to bottom function
@@ -102,7 +109,8 @@ function Clicked() {
 // once user clicks set username, modal disappears + join global channel
 $("#setUsernameBtn").on("click", () => {
   console.log("button clicked, modal should disappear");
-  if ($("#username").val()) {
+  let trimmedLength = $("#username").val().trim();
+  if (trimmedLength.length > 0) {
     $(".welcome-modal").css("display", "none");
 
     // join room global
