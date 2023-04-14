@@ -100,14 +100,13 @@ io.on("connection", function (socket) {
   });
 
   // leaveRoom (only meant for going home)
-  socket.on("leaveRoom", function (room) {
+  socket.on("leaveRoom", function () {
     // first leave current room
     // send a leave message to current room
     sendLeaveMessage();
 
-    if (room != "globalRoom") {
-      socket.leave(curRoom);
-    }
+    socket.leave(curRoom);
+
     // join global
     curRoom = "globalRoom";
     socket.currentRoom = "globalRoom";
