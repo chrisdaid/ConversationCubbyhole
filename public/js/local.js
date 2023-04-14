@@ -111,8 +111,10 @@ $("#setUsernameBtn").on("click", () => {
   console.log("button clicked, modal should disappear");
   let trimmedLength = $("#username").val().trim();
   if (trimmedLength.length > 0) {
+    // hide modal
     $(".welcome-modal").css("display", "none");
-
+    // hide the "join global to begin chatting" overlay
+    $(".selector-messages-overlay").addClass("hidden");
     // join room global
     currentRoomName = "globalRoom";
     socket.emit("joinRoom", currentRoomName);
@@ -129,11 +131,19 @@ function focusFileUpload() {
 }
 
 function goHome() {
+  // clear username
   $("#username").val("");
-  socket.emit("leaveRoom");
+  if (currentRoomName != "globalRoom") {
+    socket.emit("leaveRoom");
+  }
+  // hide the chat message box
+  $(".chat-container").addClass("hidden");
+
+  // display the overlay covering the room selector
+  $(".selector-messages-overlay").removeClass("hidden");
+
   $(".welcome-modal").css("display", "flex");
-  // $("#comment").attr("placeholder", "");
-  $(".chat-container").toggleClass("hidden");
+  // $(".chat-container").toggleClass("hidden");
 }
 
 // because of the custom upload image icon, we're using a label to display the icon and made the file uploader hidden
@@ -151,7 +161,7 @@ socket.on("image", function (info) {
     $("#messages").append(
       $("<li>").append($("<img>").attr("src", info.buffer))
     );
-    scrollToBottom();
+    setTimeout(scrollToBottom, 100);
   }
 });
 
