@@ -41,24 +41,22 @@
       <!-- welcome modal  -->
       <div class="welcome-modal">
         <!-- <h2>"it's not 4chan."</h2> -->
-        <h2 id="subtitle" class="">
-          Enter your preferred username and begin chatting!
-        </h2>
-        <div class="username-and-button-container">
-          <input
-            type="text"
-            id="username"
-            placeholder="John Doe"
-            maxlength="20"
-          />
-          <button id="setUsernameBtn">Join Global</button>
+        <div class="modal-container gradient-border" id="box">
+          <h2 id="subtitle" class="">
+            Enter your preferred username and begin chatting!
+          </h2>
+          <div class="username-and-button-container">
+            <input
+              type="text"
+              id="username"
+              placeholder="John Doe"
+              maxlength="20"
+            />
+            <button id="setUsernameBtn">Join Global</button>
+          </div>
+          <div id="usernameError" class="hidden">Please enter a username.</div>
         </div>
-        <div id="usernameError" class="hidden">Please enter a username.</div>
       </div>
-      <span class="top"></span>
-      <span class="right"></span>
-      <span class="bottom"></span>
-      <span class="left"></span>
     </section>
 
     <section id="application">
