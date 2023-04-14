@@ -133,9 +133,8 @@ function focusFileUpload() {
 function goHome() {
   // clear username
   $("#username").val("");
-  // if (currentRoomName != "globalRoom") {
-  socket.emit("leaveRoom", currentRoomName);
-  // }
+
+  socket.emit("leaveRoom");
 
   // hide the chat message box
   $(".chat-container").addClass("hidden");
