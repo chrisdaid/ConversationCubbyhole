@@ -134,7 +134,7 @@ function goHome() {
   // clear username
   $("#username").val("");
 
-  socket.emit("leaveRoom");
+  socket.emit("leaveRoom", currentRoomName);
 
   // hide the chat message box
   $(".chat-container").addClass("hidden");
