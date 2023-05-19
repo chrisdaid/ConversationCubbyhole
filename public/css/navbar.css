@@ -1,0 +1,56 @@
+    /* navbar  */
+  
+  .navbar {
+    display: flex;
+    justify-content: center;
+    padding: 1rem;
+  }
+
+  .navbar:before {
+    content: "";
+    flex: 1;
+  }
+
+  .login-container {
+    justify-content: flex-end;
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+
+  .login-btn {
+    padding: 8px 18px;
+    border-radius: 2px;
+    font-weight: 600;
+    background-color: var(--btn-color);
+    transition: 0.3s;
+    border: none;
+  }
+
+  .login-btn:hover {
+    background-color: rgba(53, 79, 82, 0.125);
+    cursor: pointer;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+  }
+  
+  .navbar #logo-img {
+    width: 50px;
+    height: 50px;
+    background: url("../assets/logo.png") no-repeat;
+    background-size: contain;
+    background-position: center;
+  }
+  
+  #current-news-scroller {
+    height: 30px;
+    width: 100%;
+  }
+
+
+  /* Only for Session.js Navbar -> user account info dropdown */
+  
