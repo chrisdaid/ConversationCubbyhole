@@ -8,6 +8,7 @@
     <script src="/socket.io/socket.io.js"></script>
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/navbar.css" />
+    <link rel="stylesheet" href="css/session.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
@@ -25,25 +26,33 @@
           </div>
       <!-- </div> -->
       <div class="login-container">
+        <div class="profile-dropdown">
           <div class="gradient-border">
+            <div class="dropdown-name-profile">
+              <div class="pfp"></div>
+              <div class="profile-name"></div>
+            </div>
+          </div>
+          <!-- dropdown content  -->
+          <div class="dropdown-content">
+          <!-- change username  -->
+            <a href="#">Change Username</a>
+            <a id="logout" href="#">Log Out</a>
+          </div>
+        
+        </div>
+          <!-- <div class="gradient-border">
               <button class="login-btn" id="logout">
                  Sign Out
               </button>
-          </div>
+          </div> -->
 
       </div>
   </div>
-<h1 id="session">Session</h1>
-
-
-        <hr>
             <form action="#">
                 <fieldset>
-                <legend>Data Information</legend>
                     <div>
                         <fieldset>
-                        <legend>General</legend>
-
                         <label for="identifier">ID:</label>
                         <input id="identifier" type="number" name="identifier" min="1">
                         <label for="gradeLevel">GradeLevel:</label>
@@ -62,24 +71,15 @@
                 </fieldset>
                 
             </form>
-
-
-<br>
-
-<div id="logout">
-    <input id="logout" type="button" value="Logout" />
-</div>    
-
-
 <section id="application">
   <!-- container with the rooms on the left, and the messages on the right -->
   <!-- below that container is the textbox for messages and the attach image button on the left of the textbox  -->
-
+<!-- 
   <div class="selector-messages-overlay">
     <div id="selector-messages-overlay-text">
       Join Global To Begin Chatting
     </div>
-  </div>
+  </div> -->
 
   <div class="selector-and-messages-container">
     <!-- navigation - room selector  -->
@@ -139,7 +139,7 @@
 
 <section id="messages-section"></section>
 
-<div class="chat-container hidden">
+<div class="chat-container">
   <!--image uploader-->
   <form action="">
     <label for="image" id="custom-upload" class="custom-file-upload">
@@ -154,6 +154,7 @@
   <input id="comment" name="b" type="text" /><br />
 </div>
 
+<script src="js/homeLocal.js"></script>
 	<script src="js/session.js"></script>
 	
   </body>
