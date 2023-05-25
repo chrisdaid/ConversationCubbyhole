@@ -21,6 +21,7 @@ function readClicked() {
   });
   return false;
 }
+
 function updateClicked() {
   $.ajax({
     url: "/update",
@@ -38,29 +39,6 @@ function updateClicked() {
   });
   return false;
 }
-/*
-function deleteClicked(){
-
-    let trimIdentifier = $("#identifier").val().trim();
-    if (trimIdentifier == "") {
-      alert("bad");
-      return false; 
-    }
-
-    $.ajax({
-      url: "/delete/" + $("#identifier").val(),
-      type: "DELETE",
-      success: function(data) { 
-        if (data.error)
-          alert("bad");
-        else
-          alert("good");
-      } ,   
-      dataType: "json"
-    });  
-    return false;             
-}      
-*/
 
 function logoutClicked() {
   console.log("session logoutClicked");
@@ -71,12 +49,29 @@ function logoutClicked() {
   return false;
 }
 
+// let socket = io();
+
 $(document).ready(function () {
   console.log("session doc ready");
   $.get("/userInfo", function (data) {
     console.log("session get userInfo function callback");
 
-    if (data.username) $("#session").html("Session " + data.username);
+    // set username in the profile dropdown
+    // if (data.username) $(".profile-name").text(data.username);
+    if (data.username) {
+      $(".profile-name").text(data.username);
+      $(".profile-name").prop("title", data.username);
+      console.log(data.ident);
+      // emit createUser passing the name from mongodb into index.js
+      socket.emit("createUser", { username: data.username, id: data.ident });
+    }
+
+    // set clientSessionID once client is connected
+    // use the unique mongodb user ID
+    // socket.on("connect", () => {
+    //   clientSessionID = data.ident;
+    // });
+
     $("#identifier").val(data.ident);
     $("#gradeLevel").val(data.gradeLevel);
     console.log(data.canDrive);
