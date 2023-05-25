@@ -127,6 +127,8 @@ router.get("/session", function (req, res) {
     console.log("sendFile session.html");
     let thePath = path.resolve(__dirname, "public/views/session.html");
     res.sendFile(thePath);
+
+    console.log("NOW IN SESSION.HTML");
   } else {
     // not authenticated, throw error by sending to error 403 page
     console.log("sendFile 403.html");
