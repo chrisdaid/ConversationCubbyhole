@@ -44,29 +44,27 @@ function joinRoom(room) {
 
 //Get message from server.
 socket.on("message", function (username, data) {
-  socket.on("message", function (username, data) {
-    console.log("commented " + data);
+  console.log("commented " + data);
 
-    let time = new Date();
-    let timestring = time.toLocaleString("en-US", {
-      hour: "numeric",
-      minute: "numeric",
-      second: "numeric",
-      hour12: true,
-    });
-    console.log(timestring);
-    let comment = data.comment;
-    let messageSentFrom = username ? username : "Anonymous";
-    let fullMessage = `${timestring} ${messageSentFrom}`;
-    // display message preventing XSS scripting
-    var li = $("<div />", { text: ": " + comment });
-    var al = $("<span />", { text: fullMessage });
-    li.prepend(al);
-    $("#messages").append(li);
-
-    setTimeout(scrollToBottom, 100);
-    // scrollToBottom();
+  let time = new Date();
+  let timestring = time.toLocaleString("en-US", {
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    hour12: true,
   });
+  console.log(timestring);
+  let comment = data.comment;
+  let messageSentFrom = username ? username : "Anonymous";
+  let fullMessage = `${timestring} ${messageSentFrom}`;
+  // display message preventing XSS scripting
+  var li = $("<div />", { text: ": " + comment });
+  var al = $("<span />", { text: fullMessage });
+  li.prepend(al);
+  $("#messages").append(li);
+
+  setTimeout(scrollToBottom, 100);
+  // scrollToBottom();
 });
 
 socket.on("disconnectFromRoom", function (data) {
