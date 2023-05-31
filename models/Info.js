@@ -12,8 +12,6 @@ var infoSchema = mongoose.Schema({
     unique: true,
     type: String,
   },
-  gradeLevel: Number,
-  canDrive: Boolean,
 });
 
 var Info = mongoose.model("Info", infoSchema);
