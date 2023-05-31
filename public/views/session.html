@@ -19,12 +19,10 @@
   
   <body>  
     <div class="navbar">
-      <!-- <div class="logo-and-text  animate__animated animate__backInDown animate__fast"> -->
           <div class="logo">
               <div id="logo-img"></div>
               <h1>Conversation Cubbyhole</h1>
           </div>
-      <!-- </div> -->
       <div class="login-container">
         <div class="profile-dropdown">
           <div class="gradient-border">
@@ -36,41 +34,27 @@
           <!-- dropdown content  -->
           <div class="dropdown-content">
           <!-- change username  -->
-            <a href="#">Change Username</a>
+            <a href="#" id="change-username">Change Username</a>
             <a id="logout" href="#">Log Out</a>
           </div>
         
         </div>
-          <!-- <div class="gradient-border">
-              <button class="login-btn" id="logout">
-                 Sign Out
-              </button>
-          </div> -->
 
       </div>
   </div>
-            <form action="#">
-                <fieldset>
-                    <div>
-                        <fieldset>
-                        <label for="identifier">ID:</label>
-                        <input id="identifier" type="number" name="identifier" min="1">
-                        <label for="gradeLevel">GradeLevel:</label>
-                        <input id="gradeLevel" type="number" name="gradeLevel" min="9" max="12" value="9">
+  <div class="newUsername-modal-container hidden">
 
-                        <label for="canDrive">Drives:</label>
-                        <input type="checkbox" name="canDrive" id="canDrive">
-
-                </fieldset>
-
-                <input type="reset" name="reset" value="Clear Form">
-<!--                <input type="submit" name="send" value="Send Form">     -->                   
-      <input id="readButton" type="button" value="Read" />
-      <input id="updateButton" type="button" value="Update" />
-
-                </fieldset>
-                
-            </form>
+    <!-- add hidden class to container -->
+    <div id="newUsername-modal"> 
+      <label for="newUsername">New Username</label>
+      <input type="text" id="newUsername">
+      <div class="setUsernameBtn-container">
+        <button id="setUsernameBtn" class="btn">Set Username</button>
+        <button id="close-username-modal" class="btn">Close Modal</button>
+      </div>
+    </div>
+  </div>
+            
 <section id="application">
   <!-- container with the rooms on the left, and the messages on the right -->
   <!-- below that container is the textbox for messages and the attach image button on the left of the textbox  -->
@@ -87,45 +71,39 @@
       <div class="select-room-title">Rooms</div>
       <div class="select-room">
         <button
-          onclick="goHome()"
-          id="homePage"
-          class="room-icon"
-          title="home"
-        ></button>
-        <button
           onclick="joinRoom('globalRoom')"
           id="globalRoom"
           class="room-icon"
           value="globalRoom"
-          title="global"
+          name="global"
         ></button>
         <button
           onclick="joinRoom('booksRoom')"
           id="booksRoom"
           class="room-icon"
           value="booksRoom"
-          title="books"
+          name="books"
         ></button>
         <button
           onclick="joinRoom('entertainmentRoom')"
           value="entertainmentRoom"
           id="entertainmentRoom"
           class="room-icon"
-          title="entertainment"
+          name="entertainment"
         ></button>
         <button
           onclick="joinRoom('technologyRoom')"
           id="technologyRoom"
           value="technologyRoom"
           class="room-icon"
-          title="technology"
+          name="technology"
         ></button>
         <button
           onclick="joinRoom('healthRoom')"
           id="healthRoom"
           value="healthRoom"
           class="room-icon"
-          title="health"
+          name="health"
         ></button>
       </div>
     </div>
@@ -151,11 +129,14 @@
       accept=".jpg,.jpeg,.png,.JPG,.JPEG,.PNG"
     />
   </form>
-  <input id="comment" name="b" type="text" /><br />
+  <input id="comment" name="" type="text" />
 </div>
-
-<script src="js/homeLocal.js"></script>
+  <script type="module" src="js/tooltip.js"></script>
+  <script src="js/homeLocal.js"></script>
 	<script src="js/session.js"></script>
+  <!-- Production -->
+  <script src="https://unpkg.com/@popperjs/core@2"></script>
+  <script src="https://unpkg.com/tippy.js@6"></script>
 	
   </body>
 </html>  
