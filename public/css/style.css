@@ -72,9 +72,9 @@
   .hero-bg {
     /* padding: 50px; */
     width: 100%;
-    height: 100%;
+    height: 500px;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     /* background-color: #fff; */
   }
@@ -89,18 +89,44 @@
     max-width: 200px;
     height: auto;
   }
-/* 
-  .plant-bg {
-    min-height: 50px;
-    width: 200px;
-    height: 250px;
-    user-select: none;
-    background: url("../assets/plant-bg.webp") center no-repeat;
-    background-size: contain;
-    -webkit-filter: drop-shadow(5px 5px 10px #222);
-    filter: drop-shadow(5px 5px 10px #222);
-  } */
-  
+
+  /* new username modal */
+
+  .newUsername-modal-container {
+    width: 100vw;
+    height: 85vh;
+    position: absolute;
+    background-color: rgba(0,0,0,0.25);
+    display: grid;
+    place-items: center;
+  }
+  #newUsername-modal {
+    display: flex;
+    flex-direction: column;
+    gap: .7rem;
+    justify-content: center;
+    align-items: center;
+    background-color: var(--bg-color);
+    padding: 20px;
+    border-radius: 3px;
+  }
+
+  #newUsername {
+    font-size: 1.3rem;
+  }
+
+  #setUsernameBtn {
+
+  }
+
+  .btn {
+    font-weight: 600;
+    background-color: var(--btn-color);
+    border: 1px solid var(--accent-color);
+    padding: 10px;
+    cursor: pointer;
+  }
+
   /* welcome modal  */
   
   .welcome-modal {
