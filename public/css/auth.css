@@ -1,0 +1,17 @@
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+
+}
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+}
+
+form a {
+    color: var(--text-color);
+    
+}
