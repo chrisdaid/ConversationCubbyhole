@@ -21,9 +21,9 @@ myDatabase.prototype.postData = function (data, res) {
   });
 };
 
-myDatabase.prototype.getData = function (name, res) {
+myDatabase.prototype.getData = function (ID, res) {
   console.log("getData");
-  InfoModel.find({ name: name }, function (error, info) {
+  InfoModel.find({ ident: ID }, function (error, info) {
     if (error) {
       return res.json({ error: true });
     } else if (info == null) {
@@ -34,6 +34,7 @@ myDatabase.prototype.getData = function (name, res) {
       return res.json({
         error: false,
         ident: info[0].ident,
+        name: info[0].name,
         gradeLevel: info[0].gradeLevel,
         canDrive: info[0].canDrive,
       });
@@ -44,8 +45,8 @@ myDatabase.prototype.getData = function (name, res) {
 myDatabase.prototype.putData = function (data, res) {
   //  InfoModel.findOneAndUpdate({ident:data.ident},{name:data.name,gradeLevel:data.gradeLevel},function(error,oldData) {
   InfoModel.findOneAndUpdate(
+    { ident: data.ident },
     { name: data.name },
-    { ident: data.ident, gradeLevel: data.gradeLevel, canDrive: data.canDrive },
     function (error, oldData) {
       if (error) {
         return res.json({ error: true });

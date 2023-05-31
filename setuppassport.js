@@ -2,6 +2,7 @@ var passport = require("passport");
 var LocalStrategy = require("passport-local").Strategy;
 
 var User = require("./models/user");
+let identA = 0;
 
 module.exports = function () {
   passport.serializeUser(function (user, done) {
@@ -44,6 +45,29 @@ module.exports = function () {
           }
         });
       });
+
+      // User.findOneAndUpdate(
+      //   { username: username },
+      //   { ident: identA },
+      //   function (error, oldData) {
+      //     if (error) {
+      //       console.log(
+      //         "ERROR cannot find and update, line 52 setuppassport.js"
+      //       );
+      //     } else {
+      //       User.find({}, function (err, user) {
+      //         console.log(err);
+      //         // for (let i = 0; i < user.length; i++) {
+      //         console.log("PASSPORT-=-=-==-=-=-=-=-=- line 63");
+      //         // console.log(user[i].ident);
+      //         console.log("PASSPORT-=-=-==-=-=-=-=-=- line 65");
+      //         // identA++;
+      //         // incrementIndent();
+      //         // }
+      //       });
+      //     }
+      //   }
+      // );
     })
   );
 };

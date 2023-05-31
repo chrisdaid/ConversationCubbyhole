@@ -65,6 +65,9 @@ router.get("/successsignup", function (req, res) {
   } else {
     identA++;
     console.log("identA = " + identA);
+
+    // also update the users db
+    User.findOne({ username: req.user.username }, { ident: identA });
     res.json({ redirect: "/session", ident: identA });
   }
 });
@@ -89,12 +92,19 @@ router.get("/successlogin", function (req, res) {
 router.get("/faillogin", function (req, res) {
   console.log("get failsignup");
   // runs res.json if user DOES NOT exist OR password is incorrect.
-  res.json({ redirect: "/loginaa" });
+  res.json({ redirect: "/loginaa", message: "fail" });
 });
 
 router.get("/", function (req, res, next) {
   console.log("get root");
+  // check if logged in, if so send res.json data accordingly
   let thePath = path.resolve(__dirname, "public/views/home.html");
+
+  if (req.isAuthenticated()) {
+    // logged in
+    console.log("already logged in.... line 102");
+    res.json({ info: "authenticated" });
+  }
   res.sendFile(thePath);
 });
 
@@ -225,7 +235,7 @@ router.get("/logout", function (req, res) {
     res.redirect("/failroot");
   }
 });
-
+let userIdent = 1;
 router.post(
   "/signup",
   function (req, res, next) {
@@ -247,6 +257,7 @@ router.post(
       }
       console.log("new User");
       var newUser = new User({
+        ident: userIdent++,
         username: username,
         password: password,
       });

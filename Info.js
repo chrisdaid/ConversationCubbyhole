@@ -1,8 +1,6 @@
-let Info = function (ident, name, gradeLevel, canDrive) {
+let Info = function (ident, name) {
   this.ident = ident;
   this.name = name;
-  this.gradeLevel = gradeLevel;
-  this.canDrive = canDrive;
 };
 
 module.exports = Info;

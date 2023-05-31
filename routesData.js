@@ -84,7 +84,7 @@ router.get("/read", function (req, res) {
   }
 
   //changed code.
-  return db.getData(req.user.username, res);
+  return db.getData(req.user.ident, res);
   /*
     let val = db.getData(identifier);
     if (val == null)
@@ -101,8 +101,14 @@ router.put("/update", function (req, res) {
     return;
   }
 
-  let trimIdentifier = req.body.identifier.trim();
+  let trimIdentifier = req.body.ident.trim();
   if (trimIdentifier == "") {
+    res.json({ error: true });
+    return;
+  }
+
+  let trimUsername = req.body.username.trim();
+  if (trimUsername == "") {
     res.json({ error: true });
     return;
   }
@@ -113,35 +119,12 @@ router.put("/update", function (req, res) {
     return;
   }
 
-  let trimgradeLevel = req.body.gradeLevel.trim();
-  if (trimgradeLevel == "") {
-    res.json({ error: true });
-    return;
-  }
-
-  let gradeLevel = Number(trimgradeLevel);
-  if (Number.isNaN(gradeLevel)) {
-    res.json({ error: true });
-    return;
-  }
-
-  let canDrive = req.body.canDrive.trim();
-
-  console.log("here = " + gradeLevel);
-  let obj = new Info(identifier, req.user.username, gradeLevel, canDrive);
+  let obj = new Info(identifier, trimUsername);
   //changed code.
   return db.putData(obj, res);
-  /*    
-    let val = db.putData(obj);
-    if (val)
-        res.json({error:false});
-    else
-        res.json({error:true});
- 
-*/
 });
 
-router.delete("/delete/:identifier", function (req, res) {
+router.delete("/delete/:ident", function (req, res) {
   if (!req.isAuthenticated()) {
     console.log("req is not Authenticated");
     res.json({ error: true });

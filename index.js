@@ -46,7 +46,39 @@ app.use(passport.session());
 app.use(routes);
 app.use(routesData);
 // sockets code
+// NEW code
+let numInBooks = 0;
+let numInEnter = 0;
+let numInTechn = 0;
+let numInHealt = 0;
 
+let getNumInBooks = () => {
+  return numInBooks;
+};
+let getNumInEnter = () => {
+  return numInEnter;
+};
+let getNumInTechn = () => {
+  return numInTechn;
+};
+let getNumInHealt = () => {
+  return numInHealt;
+};
+
+app.get("/books", function (req, res) {
+  res.status(200).send(getNumInBooks().toString());
+});
+app.get("/entertainment", function (req, res) {
+  res.status(200).send(getNumInEnter().toString());
+});
+app.get("/technology", function (req, res) {
+  res.status(200).send(getNumInTechn().toString());
+});
+app.get("/health", function (req, res) {
+  res.status(200).send(getNumInHealt().toString());
+});
+
+// END OF NEW CODE
 // global variables
 let users = {};
 
@@ -60,7 +92,7 @@ io.on("connection", function (socket) {
     }
 
     //changed code.
-    console.log("HELLO", db.getData(req.user.username));
+    console.log("HELLO", db.getData(userID));
   });
 
   // keep track of currentUser's session ID
@@ -112,28 +144,207 @@ io.on("connection", function (socket) {
     });
   }
 
-  // join room according to what user clicks
+  // join room according to what user clicks (OLD)
+  // socket.on("joinRoom", function (room) {
+  //   // first leave current room
+  //   // send a leave message to current room
+  //   if (curRoom != room) {
+  //     // setTimeout(sendLeaveMessage, 10);
+  //     sendLeaveMessage();
+  //   }
+
+  //   socket.leave(curRoom);
+
+  //   // join new room
+  //   socket.join(room);
+  //   curRoom = room;
+  //   socket.currentRoom = room;
+
+  //   console.log("THE CURRENT ROOM IS :", curRoom);
+  //   console.log(`${socket.username} joined room: ${socket.currentRoom}`);
+
+  //   // send a join message to everyone
+  //   setTimeout(sendJoinMessage, 50);
+  // });
+
+  // join room according to what user clicks (NEW)
   socket.on("joinRoom", function (room) {
-    // first leave current room
-    // send a leave message to current room
-    if (curRoom != room) {
-      // setTimeout(sendLeaveMessage, 10);
-      sendLeaveMessage();
+    console.log("curRoom: " + curRoom + " newRoom: " + room);
+
+    if (room == "booksRoom") {
+      if (numInBooks == 5) {
+        console.log("Books is full");
+        return;
+      }
+
+      if (curRoom == "entertainmentRoom") {
+        numInEnter--;
+        console.log("numInEnter: " + numInEnter);
+      } else if (curRoom == "technologyRoom") {
+        numInTechn--;
+        console.log("numInTechn: " + numInTechn);
+      } else if (curRoom == "healthRoom") {
+        numInHealt--;
+        console.log("numInHealt: " + numInHealt);
+      }
+
+      if (curRoom != room) {
+        sendLeaveMessage();
+      }
+
+      socket.leave(curRoom);
+      socket.join(room);
+      curRoom = room;
+      socket.currentRoom = room;
+
+      console.log("THE CURRENT ROOM IS :", curRoom);
+      console.log(`${socket.username} joined room: ${socket.currentRoom}`);
+
+      setTimeout(sendJoinMessage, 50);
+      numInBooks++;
+      console.log("numInBooks: " + numInBooks);
+    } else if (room == "entertainmentRoom") {
+      if (numInEnter == 5) {
+        console.log("Entertainment is full");
+        return;
+      }
+
+      if (curRoom == "booksRoom") {
+        numInBooks--;
+        console.log("numInBooks: " + numInBooks);
+      } else if (curRoom == "technologyRoom") {
+        numInTechn--;
+        console.log("numInTechn: " + numInTechn);
+      } else if (curRoom == "healthRoom") {
+        numInHealt--;
+        console.log("numInHealt: " + numInHealt);
+      }
+
+      if (curRoom != room) {
+        sendLeaveMessage();
+      }
+
+      socket.leave(curRoom);
+      socket.join(room);
+      curRoom = room;
+      socket.currentRoom = room;
+
+      console.log("THE CURRENT ROOM IS :", curRoom);
+      console.log(`${socket.username} joined room: ${socket.currentRoom}`);
+
+      setTimeout(sendJoinMessage, 50);
+      numInEnter++;
+      console.log("numInEnter: " + numInEnter);
+    } else if (room == "technologyRoom") {
+      if (numInTechn == 5) {
+        console.log("Technology is full");
+        return;
+      }
+
+      if (curRoom == "booksRoom") {
+        numInEnter--;
+        console.log("numInBooks: " + numInBooks);
+      } else if (curRoom == "entertainmentRoom") {
+        numInTechn--;
+        console.log("numInEnter: " + numInEnter);
+      } else if (curRoom == "healthRoom") {
+        numInHealt--;
+        console.log("numInHealt: " + numInHealt);
+      }
+
+      if (curRoom != room) {
+        sendLeaveMessage();
+      }
+
+      socket.leave(curRoom);
+      socket.join(room);
+      curRoom = room;
+      socket.currentRoom = room;
+
+      console.log("THE CURRENT ROOM IS :", curRoom);
+      console.log(`${socket.username} joined room: ${socket.currentRoom}`);
+
+      setTimeout(sendJoinMessage, 50);
+      numInTechn++;
+      console.log("numInTechn: " + numInTechn);
+    } else if (room == "healthRoom") {
+      if (numInHealt == 5) {
+        console.log("Health is full");
+        return;
+      }
+
+      if (curRoom == "booksRoom") {
+        numInEnter--;
+        console.log("numInBooks: " + numInBooks);
+      } else if (curRoom == "entertainmentRoom") {
+        numInTechn--;
+        console.log("numInEnter: " + numInEnter);
+      } else if (curRoom == "technologyRoom") {
+        numInHealt--;
+        console.log("numInTechn: " + numInTechn);
+      }
+
+      if (curRoom != room) {
+        sendLeaveMessage();
+      }
+
+      socket.leave(curRoom);
+      socket.join(room);
+      curRoom = room;
+      socket.currentRoom = room;
+
+      console.log("THE CURRENT ROOM IS :", curRoom);
+      console.log(`${socket.username} joined room: ${socket.currentRoom}`);
+
+      setTimeout(sendJoinMessage, 50);
+      numInHealt++;
+      console.log("numInHealt: " + numInHealt);
+    } else if (room == "globalRoom") {
+      if (curRoom == "booksRoom") {
+        numInEnter--;
+        console.log("numInBooks: " + numInBooks);
+      } else if (curRoom == "entertainmentRoom") {
+        numInEnter--;
+        console.log("numInEnter: " + numInEnter);
+      } else if (curRoom == "technologyRoom") {
+        numInTechn--;
+        console.log("numInTechn: " + numInTechn);
+      } else if (curRoom == "healthRoom") {
+        numInHealt--;
+        console.log("numInHealt: " + numInHealt);
+      }
+
+      if (curRoom != room) {
+        sendLeaveMessage();
+      }
+
+      socket.leave(curRoom);
+
+      socket.join(room);
+      curRoom = room;
+      socket.currentRoom = room;
+
+      console.log("THE CURRENT ROOM IS :", curRoom);
+      console.log(`${socket.username} joined room: ${socket.currentRoom}`);
+
+      setTimeout(sendJoinMessage, 50);
+    } else {
+      if (curRoom == "booksRoom") {
+        numInEnter--;
+        console.log("numInBooks: " + numInBooks);
+      } else if (curRoom == "entertainmentRoom") {
+        numInEnter--;
+        console.log("numInEnter: " + numInEnter);
+      } else if (curRoom == "technologyRoom") {
+        numInTechn--;
+        console.log("numInTechn: " + numInTechn);
+      } else if (curRoom == "healthRoom") {
+        numInHealt--;
+        console.log("numInHealt: " + numInHealt);
+      }
     }
-
-    socket.leave(curRoom);
-
-    // join new room
-    socket.join(room);
-    curRoom = room;
-    socket.currentRoom = room;
-
-    console.log("THE CURRENT ROOM IS :", curRoom);
-    console.log(`${socket.username} joined room: ${socket.currentRoom}`);
-
-    // send a join message to everyone
-    setTimeout(sendJoinMessage, 50);
   });
+  // END of new code
 
   // leaveRoom (only meant for going home)
   socket.on("leaveRoom", function (fromRoom) {
