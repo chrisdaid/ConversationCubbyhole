@@ -22,29 +22,310 @@ let placeholderMessageTemplate = "Send a message in ";
 
 // initially join global channel when button is clicked
 
-// join room function
-function joinRoom(room) {
-  if (room != currentRoomName) {
-    currentRoomName = room;
-    console.log(`JOINING ${room}`);
-    socket.emit("joinRoom", room);
+// join room function {OLD}
+// function joinRoom(room) {
+//   if (room != currentRoomName) {
+//     currentRoomName = room;
+//     console.log(`JOINING ${room}`);
+//     socket.emit("joinRoom", room);
 
-    // change message box placeholder to reflect current room
-    $("#comment").attr(
-      "placeholder",
-      placeholderMessageTemplate + currentRoomName
-    );
-  }
+//     // change message box placeholder to reflect current room
+//     $("#comment").attr(
+//       "placeholder",
+//       placeholderMessageTemplate + currentRoomName
+//     );
+//   }
+// }
+
+// new jasper code ------ {NEW}
+//added/////////////////////////////////////////////////////////////////////////////////////////////////////
+let numInBooks = 0;
+let numInEnter = 0;
+let numInTechn = 0;
+let numInHealt = 0;
+
+function getNumInBooks(operation) {
+  $.ajax({
+    url: "/books",
+    type: "GET",
+    data: { roomName: "booksRoom" },
+    success: function (data) {
+      console.log("getNumInBooks: " + data);
+      numInBooks = Number(data);
+      if (operation == "add") {
+        numInBooks++;
+      } else if (operation == "subtract") {
+        numInBooks--;
+      }
+      if (operation == "add") {
+        numInBooks--;
+      } else if (operation == "subtract") {
+        numInBooks++;
+      }
+      console.log("getrequest getNumInBooks: " + numInBooks);
+    },
+  });
+}
+function getNumInEnter(operation) {
+  $.ajax({
+    url: "/entertainment",
+    type: "GET",
+    data: { roomName: "entertainmentRoom" },
+    success: function (data) {
+      //console.log("getNumInEnter: " + data);
+      numInEnter = Number(data);
+      if (operation == "add") {
+        numInEnter++;
+      } else if (operation == "subtract") {
+        numInEnter--;
+      }
+      if (operation == "add") {
+        numInEnter--;
+      } else if (operation == "subtract") {
+        numInEnter++;
+      }
+      //console.log("getrequest getNumInEnter: " + numInEnter);
+    },
+  });
+}
+function getNumInTechn(operation) {
+  $.ajax({
+    url: "/technology",
+    type: "GET",
+    data: { roomName: "technologyRoom" },
+    success: function (data) {
+      //console.log("getNumInTechn: " + data);
+      numInTechn = Number(data);
+      if (operation == "add") {
+        numInTechn++;
+      } else if (operation == "subtract") {
+        numInTechn--;
+      }
+      if (operation == "add") {
+        numInEnter--;
+      } else if (operation == "subtract") {
+        numInEnter++;
+      }
+      //console.log("getrequest getNumInTechn: " + numInTechn);
+    },
+  });
+}
+function getNumInHealt(operation) {
+  $.ajax({
+    url: "/health",
+    type: "GET",
+    data: { roomName: "healthRoom" },
+    success: function (data) {
+      //console.log("getNumInHealt: " + data);
+      numInHealt = Number(data);
+      if (operation == "add") {
+        numInHealt++;
+      } else if (operation == "subtract") {
+        numInHealt--;
+      }
+      if (operation == "add") {
+        numInEnter--;
+      } else if (operation == "subtract") {
+        numInEnter++;
+      }
+      //console.log("getrequest getNumInHealt: " + numInHealt);
+    },
+  });
 }
 
-// // set clientUserID once client is connected
-// socket.on("connect", () => {
-//   clientUserID = socket.id;
-// });
+// join room function {NEW}
+function joinRoom(room) {
+  console.log("in local.js joinRoom");
+  getNumInBooks("");
+  getNumInEnter("");
+  getNumInTechn("");
+  getNumInHealt("");
 
+  if (room == "booksRoom") {
+    if (numInBooks == 5) {
+      alert("Books is full");
+      return;
+    }
+
+    if (currentRoomName == "entertainmentRoom") {
+      getNumInEnter("subtract");
+      //console.log("numInEnter: " + numInEnter);
+    } else if (currentRoomName == "technologyRoom") {
+      getNumInTechn("subtract");
+      //console.log("numInTechn: " + numInTechn);
+    } else if (currentRoomName == "healthRoom") {
+      getNumInHealt("subtract");
+      //console.log("numInHealt: " + numInHealt);
+    }
+
+    if (room != currentRoomName) {
+      currentRoomName = room;
+      console.log(`JOINING ${room}`);
+      socket.emit("joinRoom", room);
+
+      // change message box placeholder to reflect current room
+      $("#comment").attr(
+        "placeholder",
+        placeholderMessageTemplate + currentRoomName
+      );
+    }
+
+    getNumInBooks("add");
+    console.log("numInBooks: " + numInBooks);
+  } else if (room == "entertainmentRoom") {
+    if (numInEnter == 5) {
+      alert("Entertainment is full");
+      return;
+    }
+
+    if (currentRoomName == "booksRoom") {
+      getNumInBooks("subtract");
+      console.log("numInBooks: " + numInBooks);
+    } else if (currentRoomName == "technologyRoom") {
+      getNumInTechn("subtract");
+      console.log("numInTechn: " + numInTechn);
+    } else if (currentRoomName == "healthRoom") {
+      getNumInHealt("subtract");
+      console.log("numInHealt: " + numInHealt);
+    }
+
+    if (room != currentRoomName) {
+      currentRoomName = room;
+      console.log(`JOINING ${room}`);
+      socket.emit("joinRoom", room);
+
+      // change message box placeholder to reflect current room
+      $("#comment").attr(
+        "placeholder",
+        placeholderMessageTemplate + currentRoomName
+      );
+    }
+
+    getNumInEnter("add");
+    console.log("numInEnter: " + numInEnter);
+  } else if (room == "technologyRoom") {
+    if (numInTechn == 5) {
+      alert("Technology is full");
+      return;
+    }
+
+    if (currentRoomName == "booksRoom") {
+      getNumInBooks("subtract");
+      console.log("numInBooks: " + numInBooks);
+    } else if (currentRoomName == "entertainmentRoom") {
+      getNumInEnter("subtract");
+      console.log("numInEnter: " + numInEnter);
+    } else if (currentRoomName == "healthRoom") {
+      getNumInHealt("subtract");
+      console.log("numInHealt: " + numInHealt);
+    }
+
+    if (room != currentRoomName) {
+      currentRoomName = room;
+      console.log(`JOINING ${room}`);
+      socket.emit("joinRoom", room);
+
+      // change message box placeholder to reflect current room
+      $("#comment").attr(
+        "placeholder",
+        placeholderMessageTemplate + currentRoomName
+      );
+    }
+
+    getNumInTechn("add");
+    console.log("numInTechn: " + numInTechn);
+  } else if (room == "healthRoom") {
+    if (numInHealt == 5) {
+      alert("Health is full");
+      return;
+    }
+
+    if (currentRoomName == "booksRoom") {
+      getNumInBooks("subtract");
+      console.log("numInBooks: " + numInBooks);
+    } else if (currentRoomName == "entertainmentRoom") {
+      getNumInEnter("subtract");
+      console.log("numInEnter: " + numInEnter);
+    } else if (currentRoomName == "technologyRoom") {
+      getNumInTechn("subtract");
+      console.log("numInTechn: " + numInTechn);
+    }
+
+    if (room != currentRoomName) {
+      currentRoomName = room;
+      console.log(`JOINING ${room}`);
+      socket.emit("joinRoom", room);
+
+      // change message box placeholder to reflect current room
+      $("#comment").attr(
+        "placeholder",
+        placeholderMessageTemplate + currentRoomName
+      );
+    }
+
+    getNumInHealt("add");
+    console.log("numInHealt: " + numInHealt);
+  } else if (room == "globalRoom") {
+    if (currentRoomName == "booksRoom") {
+      getNumInBooks("subtract");
+      console.log("numInBooks: " + numInBooks);
+    } else if (currentRoomName == "entertainmentRoom") {
+      getNumInEnter("subtract");
+      console.log("numInEnter: " + numInEnter);
+    } else if (currentRoomName == "technologyRoom") {
+      getNumInTechn("subtract");
+      console.log("numInTechn: " + numInTechn);
+    } else if (currentRoomName == "healthRoom") {
+      getNumInHealt("subtract");
+      console.log("numInHealt: " + numInHealt);
+    }
+
+    if (room != currentRoomName) {
+      currentRoomName = room;
+      console.log(`JOINING ${room}`);
+      socket.emit("joinRoom", room);
+
+      // change message box placeholder to reflect current room
+      $("#comment").attr(
+        "placeholder",
+        placeholderMessageTemplate + currentRoomName
+      );
+    }
+  } else {
+    if (currentRoomName == "booksRoom") {
+      getNumInBooks("subtract");
+      console.log("numInBooks: " + numInBooks);
+    } else if (currentRoomName == "entertainmentRoom") {
+      getNumInEnter("subtract");
+      console.log("numInEnter: " + numInEnter);
+    } else if (currentRoomName == "technologyRoom") {
+      getNumInTechn("subtract");
+      console.log("numInTechn: " + numInTechn);
+    } else if (currentRoomName == "healthRoom") {
+      getNumInHealt("subtract");
+      console.log("numInHealt: " + numInHealt);
+    }
+
+    if (room != currentRoomName) {
+      currentRoomName = room;
+      console.log(`JOINING ${room}`);
+      socket.emit("joinRoom", room);
+
+      // change message box placeholder to reflect current room
+      $("#comment").attr(
+        "placeholder",
+        placeholderMessageTemplate + currentRoomName
+      );
+    }
+  }
+}
+// END JOIN ROOM FUNCTION {NEW}
+// -=-=-=--=-=-=-=-=-=-=-=-=--=-=-
 //Get message from server.
 socket.on("message", function (username, data) {
   console.log("commented " + data);
+
+  let messageSentFrom = username ? username : "Anonymous";
 
   let time = new Date();
   let timestring = time.toLocaleString("en-US", {
@@ -53,18 +334,42 @@ socket.on("message", function (username, data) {
     second: "numeric",
     hour12: true,
   });
-  console.log(timestring);
-  let comment = data.comment;
-  let messageSentFrom = username ? username : "Anonymous";
-  let fullMessage = `${timestring} ${messageSentFrom}`;
+
+  let comment = `${timestring} ${data.comment}`;
+
+  var li;
+
+  if (
+    comment.includes(".com") == true ||
+    comment.includes(".org") == true ||
+    comment.includes(".edu") == true ||
+    comment.includes(".gov") == true ||
+    comment.includes(".net") == true
+  ) {
+    if (
+      comment.includes("http://") == true ||
+      comment.includes("https://") == true
+    ) {
+      li = $(
+        `<div>${timestring} <a href=${data.comment} target="_blank">${data.comment}</a></div>`
+      );
+    } else {
+      var newComment = "http://" + data.comment;
+      li = $(
+        `<div>${timestring} <a href=${newComment} target="_blank">${newComment}</a></div>`
+      );
+    }
+  } else {
+    li = $("<div />", { text: comment });
+  }
+
   // display message preventing XSS scripting
-  var li = $("<div />", { text: ": " + comment });
-  var al = $("<span />", { text: fullMessage });
+  var al = $("<span />", { text: messageSentFrom + ": " });
+
   li.prepend(al);
   $("#messages").append(li);
 
   setTimeout(scrollToBottom, 100);
-  // scrollToBottom();
 });
 
 socket.on("disconnectFromRoom", function (data) {
@@ -126,22 +431,6 @@ $("#setUsernameBtn").on("click", () => {
 
 function focusFileUpload() {
   $("#image").focus();
-}
-
-function goHome() {
-  // clear username
-  $("#username").val("");
-
-  socket.emit("leaveRoom", currentRoomName);
-
-  // hide the chat message box
-  // $(".chat-container").addClass("hidden");
-
-  // display the overlay covering the room selector
-  // $(".selector-messages-overlay").removeClass("hidden");
-
-  // $(".welcome-modal").css("display", "flex");
-  // $(".chat-container").toggleClass("hidden");
 }
 
 // because of the custom upload image icon, we're using a label to display the icon and made the file uploader hidden

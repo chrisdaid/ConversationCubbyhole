@@ -18,8 +18,10 @@ function userClicked() {
           window.location = data.redirect;
         }, 500); // 500ms delay
       } else {
-        // else, redirect instantly
-        window.location = data.redirect;
+        // else, display error message redirect instantly
+        $("#errorMessage").text("Login failed, try again...");
+
+        // window.location = data.redirect;
       }
     }
   );

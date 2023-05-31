@@ -23,21 +23,32 @@ function readClicked() {
 }
 
 function updateClicked() {
-  $.ajax({
-    url: "/update",
-    type: "PUT",
-    data: {
-      identifier: $("#identifier").val(),
-      gradeLevel: $("#gradeLevel").val(),
-      canDrive: $("#canDrive").is(":checked"),
-    },
-    success: function (data) {
-      if (data.error) alert("bad");
-      else alert("good");
-    },
-    dataType: "json",
-  });
+  // display the modal
+  $(".newUsername-modal-container").removeClass("hidden");
+}
+
+function changeUsername() {
+  console.log("sorry changing usernames currently is broken");
+  // $.ajax({
+  //   url: "/update",
+  //   type: "PUT",
+  //   data: {
+  //     ident: $("#identifier").val(),
+  //     username: $("#newUsername").val(),
+  //   },
+  //   success: function (data) {
+  //     if (data.error) alert("bad");
+  //     else alert("good");
+  //     closeModal();
+  //   },
+  //   dataType: "json",
+  // });
+
   return false;
+}
+
+function closeModal() {
+  $(".newUsername-modal-container").addClass("hidden");
 }
 
 function logoutClicked() {
@@ -64,6 +75,14 @@ $(document).ready(function () {
       console.log(data.ident);
       // emit createUser passing the name from mongodb into index.js
       socket.emit("createUser", { username: data.username, id: data.ident });
+      // join room global once session is loaded
+      currentRoomName = "globalRoom";
+      socket.emit("joinRoom", currentRoomName);
+      // change message box placeholder to reflect current room
+      $("#comment").attr(
+        "placeholder",
+        placeholderMessageTemplate + currentRoomName
+      );
     }
 
     // set clientSessionID once client is connected
@@ -83,8 +102,9 @@ $(document).ready(function () {
   });
 
   $("#readButton").click(readClicked);
-  $("#updateButton").click(updateClicked);
-  //  $("#deleteButton").click(deleteClicked);
+  $("#change-username").click(updateClicked);
+  $("#close-username-modal").click(closeModal);
+  $("#setUsernameBtn").click(changeUsername);
 
   $("#logout").click(logoutClicked);
 });
