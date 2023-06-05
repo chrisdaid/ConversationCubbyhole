@@ -18,10 +18,10 @@ var io = require("socket.io")(http);
 
 //27017 seems to be the port number used by mongod
 //mongoose.connect("mongodb://localhost:27017/userdb");
-mongoose.connect("mongodb://127.0.0.1:27017/group123");
+mongoose.connect("mongodb://127.0.0.1:27017/conversationCubbyholeDB");
 setUpPassport();
 
-app.set("port", process.env.PORT || 3001);
+app.set("port", process.env.PORT || 3000);
 
 app.use("/js", express.static("./public/js"));
 
@@ -381,7 +381,7 @@ io.on("connection", function (socket) {
 });
 // END SOCKETS CODE
 // set port code
-var server = http.listen(3001, () => {
+var server = http.listen(3000, () => {
   console.log("Server staarted on port " + app.get("port"));
 });
 // app.listen(app.get("port"), function () {
